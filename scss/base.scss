@@ -1,6 +1,8 @@
-@use "./abstracts/colors";
+@use "./abstracts/colors" as colors;
+@use "./abstracts/reset";
 
 body{
-    background-color: colors.$color-primary;
-    color: colors.$color-secondary;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #676f75,#4da3d1);
+    font-family: 'Roboto', sans-serif;
 }
