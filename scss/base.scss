@@ -1,0 +1,6 @@
+@use "./abstracts/colors";
+
+body{
+    background-color: colors.$color-primary;
+    color: colors.$color-secondary;
+}
