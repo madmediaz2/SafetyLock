@@ -18,8 +18,16 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+main {
+  height: 80vh;
+}
+
+footer {
+  height: 20vh;
+}
+
 .card {
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.75);
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -29,7 +37,7 @@ body {
 }
 .card h3 {
   color: #000;
-  font-size: 20px;
+  font-size: 30px;
   margin-bottom: 10px;
 }
 .card p {
@@ -43,6 +51,11 @@ body {
 }
 .card a:hover {
   text-decoration: underline;
+}
+
+.card--secondary {
+  margin: 10px 0;
+  padding: 10px;
 }
 
 .button {
@@ -82,6 +95,7 @@ body {
   width: 100%;
   padding: 10px 0;
   padding-left: 10px;
+  padding-right: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -105,6 +119,25 @@ body {
   display: flex;
   flex-direction: row;
   gap: 5px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.cards article {
+  width: 300px;
+  height: 400px;
+}
+.cards article p {
+  font-size: medium;
+}
+.cards h3 {
+  display: flex;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,0 +1,19 @@
+.cards{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    article{
+        width: 300px;
+        height: 400px;
+        p{
+            font-size: medium;
+        }
+    }
+    h3{
+        display: flex;
+        justify-content: center;
+    }
+}
