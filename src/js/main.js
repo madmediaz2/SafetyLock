@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         function EventListener(credential) {
             this.credential = credential;
         }
+        // This is an instance method, not static
         EventListener.prototype.addListenerShowButton = function () {
             var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
@@ -20,14 +21,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         };
         return EventListener;
     }());
-    var Credential = [];
+    var credentials = [];
     var usernameElement = document.getElementById("script--credential-username");
     var showButton = document.getElementById("script--button-show");
     var urlElement = document.getElementById("script--credential-URL");
     var passwordElement = document.getElementById("script--credential-pw");
     var appendButton = document.getElementById("script--button-append");
     var footerButton = document.getElementById("script--button-footer");
-    var ulElement = document.getElementById("script--Credential-ul");
+    var ulElement = document.getElementById("script--credentials-ul");
     if (appendButton) {
         appendButton.addEventListener("click", function () {
             if (!urlElement || !usernameElement || !passwordElement) {
@@ -45,9 +46,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 password: password,
                 hidden: hidden,
             };
-            Credential.push(credential);
+            credentials.push(credential);
             createCredential(credential);
-            //console.log(Credential);
+            //console.log(credentials);
         });
     }
     function createCredential(credential) {

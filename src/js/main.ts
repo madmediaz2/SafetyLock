@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Hello, World!");
 
-    interface Credential {
+    interface Credentials {
         id: string;
         url: string;
         username: string;
@@ -10,12 +10,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     class EventListener {
-        credential: Credential;
+        credential: Credentials;
 
-        constructor(credential: Credential) {
+        constructor(credential: Credentials) {
             this.credential = credential;
         }
-        
+
+        // This is an instance method, not static
         addListenerShowButton() {
             const showButtonId = `generated-button-show-${this.credential.id}`;
             const showButton = document.getElementById(
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
 
-    let Credential: Credential[] = [];
+    let credentials: Credentials[] = [];
 
     const usernameElement = document.getElementById(
         "script--credential-username"
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         "script--button-footer"
     ) as HTMLButtonElement | null;
     const ulElement = document.getElementById(
-        "script--Credential-ul"
+        "script--credentials-ul"
     ) as HTMLUListElement | null;
 
     if (appendButton) {
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             let password: string = passwordElement.value;
             let hidden = true;
 
-            const credential: Credential = {
+            const credential: Credentials = {
                 id: Date.now().toString(),
                 url: url,
                 username: username,
@@ -80,13 +81,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 hidden: hidden,
             };
 
-            Credential.push(credential);
+            credentials.push(credential);
             createCredential(credential)
-            //console.log(Credential);
+            //console.log(credentials);
         });
     }
 
-    function createCredential(credential: Credential){
+    function createCredential(credential: Credentials){
 
         const liElement = document.createElement('li')
         liElement.id = credential.id;
