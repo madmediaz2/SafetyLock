@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         hidden: boolean;
     }
 
+    let credentials: Credentials[] = [];
+
     const usernameElement = document.getElementById(
         "script--credential-username"
     ) as HTMLInputElement | null;
@@ -27,6 +29,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const footerButton = document.getElementById(
         "script--button-footer"
     ) as HTMLButtonElement | null;
+    const ulElement = document.getElementById(
+        "script--credentials-ul"
+    ) as HTMLUListElement | null;
 
     if (appendButton) {
         appendButton.addEventListener("click", () => {
@@ -49,7 +54,59 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 hidden: hidden,
             };
 
-            console.log(credential);
+            credentials.push(credential);
+            createCredential(credential)
+            //console.log(credentials);
         });
+    }
+
+    function createCredential(credential: Credentials){
+
+        const liElement = document.createElement('li')
+        liElement.id = credential.id;
+        ulElement?.appendChild(liElement);
+        const list = document.getElementById(credential.id) as HTMLLIElement | null;
+
+        const divElementHead = document.createElement("div");
+        divElementHead.className = "credential-field-head"
+
+        const spanElement = document.createElement('span') as HTMLSpanElement;
+        spanElement.innerHTML = credential.username
+
+        const aElement = document.createElement('a') as HTMLAnchorElement;
+        aElement.innerHTML = credential.url;
+        aElement.href = credential.url;
+
+        divElementHead.appendChild(spanElement); divElementHead.appendChild(aElement);
+
+        const divElementFoot = document.createElement("div");
+        divElementFoot.className = "credential-field-foot";
+
+        const inputElement = document.createElement('input') as HTMLInputElement;
+        inputElement.value = credential.password
+        inputElement.id = `generated-field-pw-${credential.id}`
+        inputElement.type = 'password'
+        inputElement.className = 'input-field-password'
+
+
+        const showButtonElement = document.createElement('button') as HTMLButtonElement;
+        showButtonElement.id = `generated-button-show-${credential.id}`
+        showButtonElement.className = "button button-small";
+        showButtonElement.innerHTML = 'Show';
+
+        const deleteButtonElement = document.createElement('button') as HTMLButtonElement;
+        deleteButtonElement.id = `generated-button-delete-${credential.id}`;
+        deleteButtonElement.className = "button button-small";
+        deleteButtonElement.innerHTML = "Delete";
+
+        const divElementButtons = document.createElement('div') as HTMLDivElement;
+        divElementButtons.className = "credential-field-buttons";
+
+        divElementButtons.appendChild(showButtonElement); divElementButtons.appendChild(deleteButtonElement);
+
+        divElementFoot.appendChild(inputElement); divElementFoot.appendChild(divElementButtons);
+
+
+        list?.append(divElementHead); list?.append(divElementFoot); 
     }
 });
