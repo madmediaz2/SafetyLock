@@ -3,8 +3,9 @@
 .button {
     display: inline-block;
     padding: 5px 5px;
-    background-color: colors.$primary-color;
-    color: #fff;
+    background-color: colors.$white;
+    color: black;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     border: none;
     border-radius: 4px;
     text-align: center;
@@ -15,20 +16,19 @@
 }
 
 .button:hover {
-    background-color: colors.$primary-color-dark;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 62, 71, 0.25);
+    
 }
 
 .button:active {
-    background-color: darken(colors.$primary-color-dark, 5%);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 62, 71, 0.5);
+
 }
 
 .button--secondary {
-    background-color: colors.$secondary-color;
-    &:hover {
-        background-color: colors.$secondary-color-dark;
-    }
-    &:active {
-        background-color: darken(colors.$secondary-color-dark, 5%);
-    }
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 

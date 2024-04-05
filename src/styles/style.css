@@ -14,7 +14,7 @@ body {
 
 body {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #676f75, #4da3d1);
+  background: #dddbdb;
   font-family: "Roboto", sans-serif;
 }
 
@@ -61,8 +61,9 @@ footer {
 .button {
   display: inline-block;
   padding: 5px 5px;
-  background-color: #62676c;
-  color: #fff;
+  background-color: #fff;
+  color: black;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   border: none;
   border-radius: 4px;
   text-align: center;
@@ -73,21 +74,18 @@ footer {
 }
 
 .button:hover {
-  background-color: #4a4e51;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 62, 71, 0.25);
 }
 
 .button:active {
-  background-color: #3e4144;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 62, 71, 0.5);
 }
 
 .button--secondary {
-  background-color: #1162a8;
-}
-.button--secondary:hover {
-  background-color: #0c477a;
-}
-.button--secondary:active {
-  background-color: #0a3963;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .input-field {
@@ -97,7 +95,8 @@ footer {
   padding-left: 10px;
   padding-right: 10px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
