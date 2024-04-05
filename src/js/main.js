@@ -1,13 +1,33 @@
 document.addEventListener("DOMContentLoaded", function (event) {
     console.log("Hello, World!");
-    var credentials = [];
+    var EventListener = /** @class */ (function () {
+        function EventListener(credential) {
+            this.credential = credential;
+        }
+        EventListener.prototype.addListenerShowButton = function () {
+            var _this = this;
+            var showButtonId = "generated-button-show-".concat(this.credential.id);
+            var showButton = document.getElementById(showButtonId);
+            if (showButton) {
+                showButton.addEventListener("click", function () {
+                    console.log("Show button for ".concat(_this.credential.id, " clicked"));
+                    // You can add functionality here to show the password or whatever the button is supposed to do
+                });
+            }
+            else {
+                console.log("Button with ID ".concat(showButtonId, " not found."));
+            }
+        };
+        return EventListener;
+    }());
+    var Credential = [];
     var usernameElement = document.getElementById("script--credential-username");
     var showButton = document.getElementById("script--button-show");
     var urlElement = document.getElementById("script--credential-URL");
     var passwordElement = document.getElementById("script--credential-pw");
     var appendButton = document.getElementById("script--button-append");
     var footerButton = document.getElementById("script--button-footer");
-    var ulElement = document.getElementById("script--credentials-ul");
+    var ulElement = document.getElementById("script--Credential-ul");
     if (appendButton) {
         appendButton.addEventListener("click", function () {
             if (!urlElement || !usernameElement || !passwordElement) {
@@ -25,9 +45,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 password: password,
                 hidden: hidden,
             };
-            credentials.push(credential);
+            Credential.push(credential);
             createCredential(credential);
-            //console.log(credentials);
+            //console.log(Credential);
         });
     }
     function createCredential(credential) {
@@ -67,5 +87,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         divElementFoot.appendChild(divElementButtons);
         list === null || list === void 0 ? void 0 : list.append(divElementHead);
         list === null || list === void 0 ? void 0 : list.append(divElementFoot);
+        var listener = new EventListener(credential);
+        listener.addListenerShowButton();
     }
 });

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Hello, World!");
 
-    interface Credentials {
+    interface Credential {
         id: string;
         url: string;
         username: string;
@@ -9,7 +9,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
         hidden: boolean;
     }
 
-    let credentials: Credentials[] = [];
+    class EventListener {
+        credential: Credential;
+
+        constructor(credential: Credential) {
+            this.credential = credential;
+        }
+        
+        addListenerShowButton() {
+            const showButtonId = `generated-button-show-${this.credential.id}`;
+            const showButton = document.getElementById(
+                showButtonId
+            ) as HTMLButtonElement | null;
+            if (showButton) {
+                showButton.addEventListener("click", () => {
+                    console.log(
+                        `Show button for ${this.credential.id} clicked`
+                    );
+                    // You can add functionality here to show the password or whatever the button is supposed to do
+                });
+            } else {
+                console.log(`Button with ID ${showButtonId} not found.`);
+            }
+        }
+    }
+
+
+    let Credential: Credential[] = [];
 
     const usernameElement = document.getElementById(
         "script--credential-username"
@@ -30,7 +56,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         "script--button-footer"
     ) as HTMLButtonElement | null;
     const ulElement = document.getElementById(
-        "script--credentials-ul"
+        "script--Credential-ul"
     ) as HTMLUListElement | null;
 
     if (appendButton) {
@@ -46,7 +72,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             let password: string = passwordElement.value;
             let hidden = true;
 
-            const credential: Credentials = {
+            const credential: Credential = {
                 id: Date.now().toString(),
                 url: url,
                 username: username,
@@ -54,13 +80,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 hidden: hidden,
             };
 
-            credentials.push(credential);
+            Credential.push(credential);
             createCredential(credential)
-            //console.log(credentials);
+            //console.log(Credential);
         });
     }
 
-    function createCredential(credential: Credentials){
+    function createCredential(credential: Credential){
 
         const liElement = document.createElement('li')
         liElement.id = credential.id;
@@ -108,5 +134,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
         list?.append(divElementHead); list?.append(divElementFoot); 
+        
+        const listener = new EventListener(credential);
+        listener.addListenerShowButton();
     }
 });
