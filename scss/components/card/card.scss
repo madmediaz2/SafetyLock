@@ -25,6 +25,23 @@
             text-decoration: underline;
         }
     }
+    ul{
+        list-style-type: none;
+        height: 70%;
+        overflow-y: auto;
+        padding: 0;
+        margin: 0;
+        li{
+            width: 99%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: colors.$black;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    
+    }
 }
 .card--secondary{
     margin: 10px 0;
