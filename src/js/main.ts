@@ -89,12 +89,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     function createCredential(credential: Credentials){
 
-        const liElement = document.createElement('li')
+        const liElement = document.createElement('li') as HTMLLIElement;
         liElement.id = credential.id;
         ulElement?.appendChild(liElement);
         const list = document.getElementById(credential.id) as HTMLLIElement | null;
 
-        const divElementHead = document.createElement("div");
+        const divElementHead = document.createElement("div") as HTMLDivElement;
         divElementHead.className = "credential-field-head"
 
         const spanElement = document.createElement('span') as HTMLSpanElement;
@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         divElementHead.appendChild(spanElement); divElementHead.appendChild(aElement);
 
-        const divElementFoot = document.createElement("div");
+        const divElementFoot = document.createElement("div") as HTMLDivElement;
         divElementFoot.className = "credential-field-foot";
 
         const inputElement = document.createElement('input') as HTMLInputElement;
