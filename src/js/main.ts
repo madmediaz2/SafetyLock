@@ -119,6 +119,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
         })
     }
 
+    if(showButton){
+        showButton.addEventListener('click', () =>{
+            if (passwordElement !== null && passwordElement.type === "text") {
+                passwordElement.type = "password";
+            } else if (passwordElement) {
+                passwordElement.type = "text";
+            }
+        })
+    }
+
+
+
     function changeInputType(credential:Credentials){
         const passwordField = document.getElementById(
         `generated-field-pw-${credential.id}`
@@ -130,32 +142,41 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     }
 
-
     if (appendButton) {
+        document.addEventListener('keyup', (event) =>{
+            if(event.key == 'enter'){
+                initiateCredential();
+            }  
+        } )
         appendButton.addEventListener("click", () => {
-            if (!urlElement || !usernameElement || !passwordElement) {
-                console.log(
-                    "One or more elements are missing, returning out of function"
-                );
-                return;
-            }
-            let url: string = urlElement.value;
-            let username: string = usernameElement.value;
-            let password: string = passwordElement.value;
-            let hidden = true;
-
-            const credential: Credentials = {
-                id: Date.now().toString(),
-                url: url,
-                username: username,
-                password: password,
-                hidden: hidden,
-            };
-
-            credentials.push(credential);
-            createCredential(credential)
-            //console.log(credentials);
+          initiateCredential();
         });
+
+    }
+
+    function initiateCredential(){
+        if (!urlElement || !usernameElement || !passwordElement) {
+            console.log(
+                "One or more elements are missing, returning out of function"
+            );
+            return;
+        }
+        let url: string = urlElement.value;
+        let username: string = usernameElement.value;
+        let password: string = passwordElement.value;
+        let hidden = true;
+
+        const credential: Credentials = {
+            id: Date.now().toString(),
+            url: url,
+            username: username,
+            password: password,
+            hidden: hidden,
+        };
+
+        credentials.push(credential);
+        createCredential(credential);
+        //console.log(credentials);
     }
 
     function createCredential(credential: Credentials){

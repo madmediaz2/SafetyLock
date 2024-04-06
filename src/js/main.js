@@ -79,6 +79,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
             });
         });
     }
+    if (showButton) {
+        showButton.addEventListener('click', function () {
+            if (passwordElement !== null && passwordElement.type === "text") {
+                passwordElement.type = "password";
+            }
+            else if (passwordElement) {
+                passwordElement.type = "text";
+            }
+        });
+    }
     function changeInputType(credential) {
         var passwordField = document.getElementById("generated-field-pw-".concat(credential.id));
         if (passwordField !== null && passwordField.type === 'password') {
@@ -89,26 +99,34 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
     if (appendButton) {
-        appendButton.addEventListener("click", function () {
-            if (!urlElement || !usernameElement || !passwordElement) {
-                console.log("One or more elements are missing, returning out of function");
-                return;
+        document.addEventListener('keyup', function (event) {
+            if (event.key == 'enter') {
+                initiateCredential();
             }
-            var url = urlElement.value;
-            var username = usernameElement.value;
-            var password = passwordElement.value;
-            var hidden = true;
-            var credential = {
-                id: Date.now().toString(),
-                url: url,
-                username: username,
-                password: password,
-                hidden: hidden,
-            };
-            credentials.push(credential);
-            createCredential(credential);
-            //console.log(credentials);
         });
+        appendButton.addEventListener("click", function () {
+            initiateCredential();
+        });
+    }
+    function initiateCredential() {
+        if (!urlElement || !usernameElement || !passwordElement) {
+            console.log("One or more elements are missing, returning out of function");
+            return;
+        }
+        var url = urlElement.value;
+        var username = usernameElement.value;
+        var password = passwordElement.value;
+        var hidden = true;
+        var credential = {
+            id: Date.now().toString(),
+            url: url,
+            username: username,
+            password: password,
+            hidden: hidden,
+        };
+        credentials.push(credential);
+        createCredential(credential);
+        //console.log(credentials);
     }
     function createCredential(credential) {
         var liElement = document.createElement('li');
