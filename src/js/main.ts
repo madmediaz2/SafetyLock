@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // This is an instance method, not static
         addListenerShowButton() {
             const showButtonId = `generated-button-show-${this.credential.id}`;
-            const listItem = document.getElementById(this.credential.id);
+            const passwordField = document.getElementById(
+                `generated-field-pw-${this.credential.id}`
+            ) as HTMLInputElement | null ; 
             const showButton = document.getElementById(
                 showButtonId
             ) as HTMLButtonElement | null;
@@ -28,9 +30,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     console.log(
                         `Show button for ${this.credential.id} clicked`
                     );
-                    if (listItem) {
-                        listItem.remove();
+                    if(passwordField !== null && passwordField.type === 'password'){
+                        passwordField.type = 'text';
+                    } else if(passwordField) {
+                        passwordField.type = 'password'
                     }
+
                 });
             } else {
                 console.log(`Button with ID ${showButtonId} not found.`);

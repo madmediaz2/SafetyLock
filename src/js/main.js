@@ -8,13 +8,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
         EventListener.prototype.addListenerShowButton = function () {
             var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
-            var listItem = document.getElementById(this.credential.id);
+            var passwordField = document.getElementById("generated-field-pw-".concat(this.credential.id));
             var showButton = document.getElementById(showButtonId);
             if (showButton) {
                 showButton.addEventListener("click", function () {
                     console.log("Show button for ".concat(_this.credential.id, " clicked"));
-                    if (listItem) {
-                        listItem.remove();
+                    if (passwordField !== null && passwordField.type === 'password') {
+                        passwordField.type = 'text';
+                    }
+                    else if (passwordField) {
+                        passwordField.type = 'password';
                     }
                 });
             }
