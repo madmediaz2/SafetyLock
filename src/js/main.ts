@@ -197,13 +197,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const aElement = document.createElement('a') as HTMLAnchorElement;
         aElement.innerHTML = credential.url;
         aElement.target = "_blank"; 
-        if(credential.url.indexOf('https') > -1){
+        if(credential.url.indexOf('http') > -1){
             aElement.href = credential.url;
         }else {
             aElement.href = `https://${credential.url}`
         }
-        
-        // Set the target attribute to "_blank" to open the link in a new tab
 
         divElementHead.appendChild(spanElement); divElementHead.appendChild(aElement);
 
