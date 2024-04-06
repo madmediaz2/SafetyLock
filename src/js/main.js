@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var appendButton = document.getElementById("script--button-append");
     var footerButton = document.getElementById("script--button-footer");
     var ulElement = document.getElementById("script--credentials-ul");
-    var showAllButton = document.getElementById("script--button-show");
+    var showAllButton = document.getElementById("script--button-show-all");
     if (footerButton) {
         footerButton.addEventListener('click', function () {
             var cards = document.getElementsByClassName("cards");
@@ -69,6 +69,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 }
             }
         });
+    }
+    if (showAllButton) {
+        console.log('check');
+        showAllButton.addEventListener('click', function () {
+            console.log('clicked');
+            credentials.forEach(function (credentials) {
+                changeInputType(credentials);
+            });
+        });
+    }
+    function changeInputType(credential) {
+        var passwordField = document.getElementById("generated-field-pw-".concat(credential.id));
+        if (passwordField !== null && passwordField.type === 'password') {
+            passwordField.type = 'text';
+        }
+        else if (passwordField) {
+            passwordField.type = 'password';
+        }
     }
     if (appendButton) {
         appendButton.addEventListener("click", function () {

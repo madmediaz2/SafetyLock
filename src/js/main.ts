@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         "script--credentials-ul"
     ) as HTMLUListElement | null;
     const showAllButton = document.getElementById(
-        "script--button-show"
+        "script--button-show-all"
     ) as HTMLButtonElement | null;
 
     if (footerButton) {
@@ -107,6 +107,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 }
             }
         })
+    }
+
+    if(showAllButton){
+        console.log('check')
+        showAllButton.addEventListener('click', () =>{
+            console.log('clicked')
+            credentials.forEach(credentials => {
+                changeInputType(credentials)
+            });
+        })
+    }
+
+    function changeInputType(credential:Credentials){
+        const passwordField = document.getElementById(
+        `generated-field-pw-${credential.id}`
+            ) as HTMLInputElement | null ;
+        if (passwordField !== null && passwordField.type === 'password'){
+                passwordField.type = 'text';
+        } else if(passwordField) {
+                passwordField.type = 'password';
+        }
     }
 
 
