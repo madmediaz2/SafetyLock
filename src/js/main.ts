@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // This is an instance method, not static
         addListenerShowButton() {
             const showButtonId = `generated-button-show-${this.credential.id}`;
+            const listItem = document.getElementById(this.credential.id);
             const showButton = document.getElementById(
                 showButtonId
             ) as HTMLButtonElement | null;
@@ -27,10 +28,36 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     console.log(
                         `Show button for ${this.credential.id} clicked`
                     );
-                    // You can add functionality here to show the password or whatever the button is supposed to do
+                    if (listItem) {
+                        listItem.remove();
+                    }
                 });
             } else {
                 console.log(`Button with ID ${showButtonId} not found.`);
+            }
+        }
+        addListenerDeleteButton() {
+            const deleteButtonId = `generated-button-delete-${this.credential.id}`;
+            const deleteButton = document.getElementById(deleteButtonId);
+
+            if (deleteButton) {
+                deleteButton.addEventListener("click", () => {
+                    const listItem = document.getElementById(
+                            this.credential.id
+                    );
+                    if (listItem) {
+                        listItem.remove();
+                        console.log(
+                            `Credential ${this.credential.id} deleted.`
+                        );
+                    } else {
+                        console.log(
+                            `List item for credential ${this.credential.id} not found.`
+                        );
+                    }
+                });
+            } else {
+                console.log(`Button with ID ${deleteButtonId} not found.`);
             }
         }
     }
@@ -138,5 +165,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         
         const listener = new EventListener(credential);
         listener.addListenerShowButton();
+        listener.addListenerDeleteButton();
     }
 });

@@ -8,15 +8,38 @@ document.addEventListener("DOMContentLoaded", function (event) {
         EventListener.prototype.addListenerShowButton = function () {
             var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
+            var listItem = document.getElementById(this.credential.id);
             var showButton = document.getElementById(showButtonId);
             if (showButton) {
                 showButton.addEventListener("click", function () {
                     console.log("Show button for ".concat(_this.credential.id, " clicked"));
-                    // You can add functionality here to show the password or whatever the button is supposed to do
+                    if (listItem) {
+                        listItem.remove();
+                    }
                 });
             }
             else {
                 console.log("Button with ID ".concat(showButtonId, " not found."));
+            }
+        };
+        EventListener.prototype.addListenerDeleteButton = function () {
+            var _this = this;
+            var deleteButtonId = "generated-button-delete-".concat(this.credential.id);
+            var deleteButton = document.getElementById(deleteButtonId);
+            if (deleteButton) {
+                deleteButton.addEventListener("click", function () {
+                    var listItem = document.getElementById(_this.credential.id);
+                    if (listItem) {
+                        listItem.remove();
+                        console.log("Credential ".concat(_this.credential.id, " deleted."));
+                    }
+                    else {
+                        console.log("List item for credential ".concat(_this.credential.id, " not found."));
+                    }
+                });
+            }
+            else {
+                console.log("Button with ID ".concat(deleteButtonId, " not found."));
             }
         };
         return EventListener;
@@ -90,5 +113,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         list === null || list === void 0 ? void 0 : list.append(divElementFoot);
         var listener = new EventListener(credential);
         listener.addListenerShowButton();
+        listener.addListenerDeleteButton();
     }
 });
