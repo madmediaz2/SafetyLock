@@ -55,6 +55,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var appendButton = document.getElementById("script--button-append");
     var footerButton = document.getElementById("script--button-footer");
     var ulElement = document.getElementById("script--credentials-ul");
+    var showAllButton = document.getElementById("script--button-show");
+    if (footerButton) {
+        footerButton.addEventListener('click', function () {
+            var cards = document.getElementsByClassName("cards");
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                if (card.style.flexDirection === "row") {
+                    card.style.flexDirection = "row-reverse"; // Change the flex direction here
+                }
+                else {
+                    card.style.flexDirection = 'row';
+                }
+            }
+        });
+    }
     if (appendButton) {
         appendButton.addEventListener("click", function () {
             if (!urlElement || !usernameElement || !passwordElement) {

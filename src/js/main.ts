@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     console.log(
                         `Show button for ${this.credential.id} clicked`
                     );
-                    if(passwordField !== null && passwordField.type === 'password'){
+                    if (passwordField !== null && passwordField.type === 'password'){
                         passwordField.type = 'text';
                     } else if(passwordField) {
-                        passwordField.type = 'password'
+                        passwordField.type = 'password';
                     }
 
                 });
@@ -91,6 +91,24 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const ulElement = document.getElementById(
         "script--credentials-ul"
     ) as HTMLUListElement | null;
+    const showAllButton = document.getElementById(
+        "script--button-show"
+    ) as HTMLButtonElement | null;
+
+    if (footerButton) {
+        footerButton.addEventListener('click', () =>{
+            const cards = document.getElementsByClassName("cards");
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i] as HTMLElement;
+                if(card.style.flexDirection === "row"){
+                    card.style.flexDirection = "row-reverse"; // Change the flex direction here
+                } else {
+                    card.style.flexDirection = 'row'
+                }
+            }
+        })
+    }
+
 
     if (appendButton) {
         appendButton.addEventListener("click", () => {
