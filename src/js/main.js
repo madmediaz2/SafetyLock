@@ -98,12 +98,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
             passwordField.type = 'password';
         }
     }
+    document.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            initiateCredential();
+            console.log('test');
+        }
+    });
     if (appendButton) {
-        document.addEventListener('keyup', function (event) {
-            if (event.key == 'enter') {
-                initiateCredential();
-            }
-        });
         appendButton.addEventListener("click", function () {
             initiateCredential();
         });
@@ -139,7 +140,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         spanElement.innerHTML = credential.username;
         var aElement = document.createElement('a');
         aElement.innerHTML = credential.url;
-        aElement.href = credential.url;
+        aElement.target = "_blank";
+        if (credential.url.indexOf('https') > -1) {
+            aElement.href = credential.url;
+        }
+        else {
+            aElement.href = "https://".concat(credential.url);
+        }
+        // Set the target attribute to "_blank" to open the link in a new tab
         divElementHead.appendChild(spanElement);
         divElementHead.appendChild(aElement);
         var divElementFoot = document.createElement("div");
