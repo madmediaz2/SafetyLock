@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    // Definition of the Credential interface, specifying the structure of credential objects.
+    // Define the structure of a credential object
     interface Credential {
         id: string;
         url: string;
@@ -8,19 +8,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
         hidden: boolean;
     }
 
-    // Retrieve credentials from local storage or initialize an empty array if there are none.
+    // Retrieve credentials from localStorage or initialize an empty array if none exist
     let credentials: Credential[] = JSON.parse(localStorage.getItem('credentials') || '[]');
 
-    // Class definition for EventListener, which encapsulates event listener functions for various elements.
+    // Class to manage event listeners for credential items
     class EventListener {
         credential: Credential;
         constructor(credential: Credential) {
             this.credential = credential;
         }
 
-        // Method to add event listener for the show button.
+        // Add event listener for showing or hiding a password
         addListenerShowButton() {
-            // Retrieve elements and attach event listener to show/hide password.
             const showButtonId = `generated-button-show-${this.credential.id}`;
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
             const showButton = document.getElementById(showButtonId) as HTMLButtonElement | null;
@@ -30,7 +29,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
 
             showButton?.addEventListener("click", () => {
-                // Toggle password visibility and update credential object accordingly.
                 if (passwordField.type === 'password'){
                     passwordField.type = 'text';
                     this.credential.hidden = false;
@@ -40,43 +38,45 @@ document.addEventListener("DOMContentLoaded", (event) => {
                     this.credential.hidden = true;
                     showButton.innerText = 'Show'
                 }
-                // Save updated credentials to local storage.
+                // Save any changes to credentials in local storage
                 saveCredentials();
             });
         }
         
-        // Method to add event listener for the delete button.
+        // Add event listener for deleting a credential
         addListenerDeleteButton() {
-            // Retrieve delete button element and attach event listener to delete credential.
             const deleteButtonId = `generated-button-delete-${this.credential.id}`;
             const deleteButton = document.getElementById(deleteButtonId);  
 
             deleteButton?.addEventListener("click", () => {
-                // Remove credential from DOM and update credentials array, then save to local storage.
                 const listItem = document.getElementById(this.credential.id);
                 listItem?.remove();    
+                // Filter out the deleted credential and save the update
                 credentials = credentials.filter(cred => cred.id !== this.credential.id);
                 saveCredentials();
             });
         }
 
-        // Method to add event listener for the password field, updating credentials on keyup.
+        // Add event listener to update password in the credential object on keyup
         addListenerPasswordField(){
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
 
             passwordField?.addEventListener('keyup', ()=>{
                 this.credential.password = passwordField.value
+                // Save any changes to credentials in local storage
                 saveCredentials();
             })
         }
     }
 
-    // Event listener for toggling card layout orientation.
+    // Event listener for changing the layout orientation of the credential cards
     const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
     const cards = document.getElementsByClassName("cards");
     const card = cards[0] as HTMLElement;
+
     let direction: Boolean = JSON.parse(localStorage.getItem('direction') || '[]')
     card.style.flexDirection = direction ? 'row' : 'row-reverse'
+
     let row: Boolean;
     footerButton?.addEventListener('click', () =>{ 
         if(card.style.flexDirection === "row"){
@@ -86,14 +86,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
             card.style.flexDirection = 'row'
             row = true;
         }
+        // Save the new direction setting to local storage
         saveDirection(row)
     })
 
+    // Save layout direction to local storage
     function saveDirection(boolean:Boolean){
         localStorage.setItem('direction', JSON.stringify(boolean))
     }
 
-    // Event listener for toggling password visibility for all credentials.
+    // Event listener to toggle password visibility for all credentials
     const showAllButton = document.getElementById("script--button-show-all") as HTMLButtonElement | null;
     let iterator = 0;
     showAllButton?.addEventListener('click', () =>{
@@ -104,7 +106,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         iterator += 1;
     })
 
-    // Event listener for toggling password visibility for a single credential.
     const showButton = document.getElementById("script--button-show") as HTMLButtonElement | null;
     showButton?.addEventListener('click', () =>{
         if (!passwordElement){
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     })
     
-    // Function to toggle password visibility for all credentials.
+    // Toggle password visibility for all credentials and update button text accordingly
     function changeInputType(credential:Credential){
         const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
         const showButton = document.getElementById(`generated-button-show-${credential.id}`) as HTMLButtonElement | null;
@@ -141,10 +142,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
         showButton.innerText = credential.hidden ? "Show" : "Hide"
         console.log(iterator)
+        // Save any changes to credentials in local storage
         saveCredentials();
     }
     
-    // Event listener for detecting Enter key press to initiate credential creation.
+    // Event listener to create a new credential on Enter key press
     document.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
             initiateCredential();
@@ -152,23 +154,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
-    // Event listener for appending a new credential.
+    // Event listener for adding a new credential
     const appendButton = document.getElementById("script--button-append") as HTMLButtonElement | null;
     appendButton?.addEventListener("click", () => {
         initiateCredential();
     });
 
-    // Function to save credentials to local storage.
+    // Save credentials to local storage
     function saveCredentials() {
         localStorage.setItem('credentials', JSON.stringify(credentials));
     }
 
-    // Retrieve input elements for username, URL, and password.
+    // Retrieve input elements for new credential creation
     const usernameElement = document.getElementById("script--credential-username") as HTMLInputElement | null;
     const urlElement = document.getElementById("script--credential-URL") as HTMLInputElement | null;
     const passwordElement = document.getElementById("script--credential-pw") as HTMLInputElement | null;
 
-    // Function to initiate credential creation.
+    // Function to create a new credential object and add it to the array
     function initiateCredential(){
         if (!urlElement || !usernameElement || !passwordElement) {
             return;
@@ -178,7 +180,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             return;
         }
 
-        // Create credential object and add it to the credentials array.
         let url: string = urlElement.value;
         let username: string = usernameElement.value;
         let password: string = passwordElement.value;
@@ -193,90 +194,74 @@ document.addEventListener("DOMContentLoaded", (event) => {
         };
 
         credentials.push(credential);
-        // Create DOM elements for the new credential.
         createCredential(credential);
-        // Save updated credentials to local storage.
+        // Save updated credentials array to local storage
         saveCredentials();
-        // Clear input values after creating the credential.
+        // Reset input fields after adding the credential
         urlElement.value = '';
         usernameElement.value = '';
         passwordElement.value = '';
     }
 
-    // Function to create DOM elements representing a credential and attach event listeners to them.
+    // Function to create DOM elements for a credential and attach event listeners
     function createCredential(credential: Credential){
-    // Retrieve the <ul> element for credentials list.
-    const ulElement = document.getElementById("script--credentials-ul") as HTMLUListElement | null;
-    // Create a <li> element to hold the credential details and set its id to the credential's id.
-    const liElement = document.createElement('li') as HTMLLIElement;
-    liElement.id = credential.id;
-    // Append the <li> element to the <ul> element.
-    ulElement?.appendChild(liElement);
     
-    // Retrieve the newly created <li> element.
-    const list = document.getElementById(credential.id) as HTMLLIElement | null;
+        const ulElement = document.getElementById("script--credentials-ul") as HTMLUListElement | null;
+        const liElement = document.createElement('li') as HTMLLIElement;
+        liElement.id = credential.id;
+        ulElement?.appendChild(liElement);
+        
+        const list = document.getElementById(credential.id) as HTMLLIElement | null;
 
-    // Create a <div> element to hold the username and URL.
-    const divElementHead = document.createElement("div") as HTMLDivElement;
-    divElementHead.className = "credential-field-head"
+        const divElementHead = document.createElement("div") as HTMLDivElement;
+        divElementHead.className = "credential-field-head"
 
-    // Create a <span> element to display the username.
-    const spanElement = document.createElement('span') as HTMLSpanElement;
-    spanElement.innerHTML = credential.username
+        const spanElement = document.createElement('span') as HTMLSpanElement;
+        spanElement.innerHTML = credential.username
 
-    // Create an <a> element to display and link to the URL.
-    const anchorElement = document.createElement('a') as HTMLAnchorElement;
-    anchorElement.innerHTML = credential.url;
-    anchorElement.target = "_blank"; 
-    anchorElement.href = credential.url.indexOf('http') ? credential.url : `https://${credential.url}`;
+        const anchorElement = document.createElement('a') as HTMLAnchorElement;
+        anchorElement.innerHTML = credential.url;
+        anchorElement.target = "_blank"; 
+        anchorElement.href = credential.url.indexOf('http') > -1 ? credential.url : `https://${credential.url}`;
 
-    // Append the username and URL elements to the <div> element.
-    divElementHead.appendChild(spanElement); divElementHead.appendChild(anchorElement);
+        divElementHead.appendChild(spanElement); divElementHead.appendChild(anchorElement);
 
-    // Create a <div> element to hold the password input field and action buttons.
-    const divElementFoot = document.createElement("div") as HTMLDivElement;
-    divElementFoot.className = "credential-field-foot";
+        const divElementFoot = document.createElement("div") as HTMLDivElement;
+        divElementFoot.className = "credential-field-foot";
 
-    // Create an <input> element for the password field and set its value and type.
-    const inputElement = document.createElement('input') as HTMLInputElement;
-    inputElement.value = credential.password
-    inputElement.id = `generated-field-pw-${credential.id}`
-    inputElement.type = credential.hidden ? 'password' : 'text';
-    inputElement.className = 'input-field-password'
+        const inputElement = document.createElement('input') as HTMLInputElement;
+        inputElement.value = credential.password
+        inputElement.id = `generated-field-pw-${credential.id}`
+        inputElement.type = credential.hidden ? 'password' : 'text';
+        inputElement.className = 'input-field-password'
 
-    // Create a <button> element to show/hide the password.
-    const showButtonElement = document.createElement('button') as HTMLButtonElement;
-    showButtonElement.id = `generated-button-show-${credential.id}`
-    showButtonElement.className = "button button-small";
-    showButtonElement.innerHTML = 'Show';
+        const showButtonElement = document.createElement('button') as HTMLButtonElement;
+        showButtonElement.id = `generated-button-show-${credential.id}`
+        showButtonElement.className = "button button-small";
+        showButtonElement.innerText = credential.hidden ? 'Show' : "Hide"
 
-    // Create a <button> element to delete the credential.
-    const deleteButtonElement = document.createElement('button') as HTMLButtonElement;
-    deleteButtonElement.id = `generated-button-delete-${credential.id}`;
-    deleteButtonElement.className = "button button-small";
-    deleteButtonElement.innerHTML = credential.hidden ? 'Delete' : "Show"
+        const deleteButtonElement = document.createElement('button') as HTMLButtonElement;
+        deleteButtonElement.id = `generated-button-delete-${credential.id}`;
+        deleteButtonElement.className = "button button-small";
+        deleteButtonElement.innerText = 'Delete';
 
-    // Create a <div> element to hold the action buttons.
-    const divElementButtons = document.createElement('div') as HTMLDivElement;
-    divElementButtons.className = "credential-field-buttons";
+        const divElementButtons = document.createElement('div') as HTMLDivElement;
+        divElementButtons.className = "credential-field-buttons";
 
-    // Append the action buttons to the <div> element.
-    divElementButtons.appendChild(showButtonElement); divElementButtons.appendChild(deleteButtonElement);
+        divElementButtons.appendChild(showButtonElement); divElementButtons.appendChild(deleteButtonElement);
 
-    // Append the password input field and action buttons to the <div> element.
-    divElementFoot.appendChild(inputElement); divElementFoot.appendChild(divElementButtons);
+        divElementFoot.appendChild(inputElement); divElementFoot.appendChild(divElementButtons);
 
-    // Append the username/URL and password elements to the <li> element.
-    list?.append(divElementHead); list?.append(divElementFoot); 
-    
-    // Instantiate EventListener object for the new credential and attach event listeners.
-    const listener = new EventListener(credential);
-    listener.addListenerShowButton();
-    listener.addListenerDeleteButton();
-    listener.addListenerPasswordField();
-}
+        list?.append(divElementHead); list?.append(divElementFoot); 
+        
+        // Attach event listeners to new credential elements
+        const listener = new EventListener(credential);
+        listener.addListenerShowButton();
+        listener.addListenerDeleteButton();
+        listener.addListenerPasswordField();
+    }
 
 
-    // Iterate through existing credentials and create DOM elements for each.
+    // Iterate over existing credentials and create their DOM elements
     credentials.forEach(credential => createCredential(credential));
 });
