@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function (event) {
+    var credentials = JSON.parse(localStorage.getItem('credentials') || '[]');
     var EventListener = /** @class */ (function () {
         function EventListener(credential) {
             this.credential = credential;
         }
         // This is an instance method, not static
         EventListener.prototype.addListenerShowButton = function () {
+            var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
             var passwordField = document.getElementById("generated-field-pw-".concat(this.credential.id));
             var showButton = document.getElementById(showButtonId);
@@ -14,10 +16,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
             showButton === null || showButton === void 0 ? void 0 : showButton.addEventListener("click", function () {
                 if (passwordField.type === 'password') {
                     passwordField.type = 'text';
+                    _this.credential.hidden = false;
                 }
                 else {
                     passwordField.type = 'password';
+                    _this.credential.hidden = true;
                 }
+                saveCredentials();
             });
         };
         EventListener.prototype.addListenerDeleteButton = function () {
@@ -27,11 +32,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
             deleteButton === null || deleteButton === void 0 ? void 0 : deleteButton.addEventListener("click", function () {
                 var listItem = document.getElementById(_this.credential.id);
                 listItem === null || listItem === void 0 ? void 0 : listItem.remove();
+                credentials = credentials.filter(function (cred) { return cred.id !== _this.credential.id; });
+                saveCredentials();
+            });
+        };
+        EventListener.prototype.addListenerPasswordField = function () {
+            var _this = this;
+            var passwordField = document.getElementById("generated-field-pw-".concat(this.credential.id));
+            if (!passwordField) {
+                return;
+            }
+            passwordField.addEventListener('keyup', function () {
+                _this.credential.password = passwordField.value;
+                console.log(passwordField.value);
+                saveCredentials();
             });
         };
         return EventListener;
     }());
-    var credentials = [];
     var footerButton = document.getElementById("script--button-footer");
     var cards = document.getElementsByClassName("cards");
     var card = cards[0];
@@ -71,10 +89,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
+            credential.hidden = false;
         }
         else {
             passwordField.type = 'password';
+            credential.hidden = true;
         }
+        saveCredentials();
     }
     document.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
@@ -86,6 +107,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     appendButton === null || appendButton === void 0 ? void 0 : appendButton.addEventListener("click", function () {
         initiateCredential();
     });
+    function saveCredentials() {
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+    }
     var usernameElement = document.getElementById("script--credential-username");
     var urlElement = document.getElementById("script--credential-URL");
     var passwordElement = document.getElementById("script--credential-pw");
@@ -112,6 +136,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         };
         credentials.push(credential);
         createCredential(credential);
+        saveCredentials();
         urlValue = '';
         usernameValue = '';
         passwordValue = '';
@@ -130,12 +155,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var anchorElement = document.createElement('a');
         anchorElement.innerHTML = credential.url;
         anchorElement.target = "_blank";
-        if (credential.url.indexOf('http') > -1) {
-            anchorElement.href = credential.url;
-        }
-        else {
-            anchorElement.href = "https://".concat(credential.url);
-        }
+        anchorElement.href = credential.url.startsWith('http') ? credential.url : "https://".concat(credential.url);
         divElementHead.appendChild(spanElement);
         divElementHead.appendChild(anchorElement);
         var divElementFoot = document.createElement("div");
@@ -143,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var inputElement = document.createElement('input');
         inputElement.value = credential.password;
         inputElement.id = "generated-field-pw-".concat(credential.id);
-        inputElement.type = 'password';
+        inputElement.type = credential.hidden ? 'password' : 'text';
         inputElement.className = 'input-field-password';
         var showButtonElement = document.createElement('button');
         showButtonElement.id = "generated-button-show-".concat(credential.id);
@@ -164,5 +184,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var listener = new EventListener(credential);
         listener.addListenerShowButton();
         listener.addListenerDeleteButton();
+        listener.addListenerPasswordField();
     }
+    credentials.forEach(function (credential) { return createCredential(credential); });
 });

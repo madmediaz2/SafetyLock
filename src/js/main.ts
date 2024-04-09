@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         hidden: boolean;
     }
 
+    let credentials: Credential[] = JSON.parse(localStorage.getItem('credentials') || '[]');
+
     class EventListener {
         credential: Credential;
         constructor(credential: Credential) {
@@ -26,9 +28,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
             showButton?.addEventListener("click", () => {
                 if (passwordField.type === 'password'){
                     passwordField.type = 'text';
+                    this.credential.hidden = false;
                 } else{
                     passwordField.type = 'password';
+                    this.credential.hidden = true;
                 }
+                saveCredentials();
             });
             
                 
@@ -40,12 +45,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
             deleteButton?.addEventListener("click", () => {
                 const listItem = document.getElementById(this.credential.id);
                 listItem?.remove();    
+                credentials = credentials.filter(cred => cred.id !== this.credential.id);
+                saveCredentials();
             });
+        }
+        addListenerPasswordField(){
+            const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
+
+            if(!passwordField){
+                return;
+            }
+            passwordField.addEventListener('keyup', ()=>{
+                this.credential.password = passwordField.value
+                console.log(passwordField.value)
+                saveCredentials();
+            })
         }
     }
 
 
-    let credentials: Credential[] = [];
+    
 
 
     const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
@@ -91,9 +110,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
         if (passwordField.type === 'password'){
             passwordField.type = 'text';
+            credential.hidden = false;
         } else {
             passwordField.type = 'password';
+            credential.hidden = true;
         }
+        saveCredentials();
     }
     
     document.addEventListener("keypress", (event) => {
@@ -109,8 +131,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         initiateCredential();
     });
 
+    function saveCredentials() {
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+    }
 
-    
     const usernameElement = document.getElementById("script--credential-username") as HTMLInputElement | null;
     const urlElement = document.getElementById("script--credential-URL") as HTMLInputElement | null;
     const passwordElement = document.getElementById("script--credential-pw") as HTMLInputElement | null;
@@ -140,6 +164,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         credentials.push(credential);
         createCredential(credential);
+        saveCredentials();
         urlValue = '';
         usernameValue ='';
         passwordValue ='';
@@ -163,11 +188,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const anchorElement = document.createElement('a') as HTMLAnchorElement;
         anchorElement.innerHTML = credential.url;
         anchorElement.target = "_blank"; 
-        if(credential.url.indexOf('http') > -1){
-            anchorElement.href = credential.url;
-        }else {
-            anchorElement.href = `https://${credential.url}`
-        }
+        anchorElement.href = credential.url.startsWith('http') ? credential.url : `https://${credential.url}`;
 
         divElementHead.appendChild(spanElement); divElementHead.appendChild(anchorElement);
 
@@ -177,7 +198,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const inputElement = document.createElement('input') as HTMLInputElement;
         inputElement.value = credential.password
         inputElement.id = `generated-field-pw-${credential.id}`
-        inputElement.type = 'password'
+        inputElement.type = credential.hidden ? 'password' : 'text';
         inputElement.className = 'input-field-password'
 
 
@@ -204,5 +225,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const listener = new EventListener(credential);
         listener.addListenerShowButton();
         listener.addListenerDeleteButton();
+        listener.addListenerPasswordField();
     }
+
+    credentials.forEach(credential => createCredential(credential));
 });
