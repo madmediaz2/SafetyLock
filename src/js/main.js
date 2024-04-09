@@ -127,17 +127,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
         divElementHead.className = "credential-field-head";
         var spanElement = document.createElement('span');
         spanElement.innerHTML = credential.username;
-        var aElement = document.createElement('a');
-        aElement.innerHTML = credential.url;
-        aElement.target = "_blank";
+        var anchorElement = document.createElement('a');
+        anchorElement.innerHTML = credential.url;
+        anchorElement.target = "_blank";
         if (credential.url.indexOf('http') > -1) {
-            aElement.href = credential.url;
+            anchorElement.href = credential.url;
         }
         else {
-            aElement.href = "https://".concat(credential.url);
+            anchorElement.href = "https://".concat(credential.url);
         }
         divElementHead.appendChild(spanElement);
-        divElementHead.appendChild(aElement);
+        divElementHead.appendChild(anchorElement);
         var divElementFoot = document.createElement("div");
         divElementFoot.className = "credential-field-foot";
         var inputElement = document.createElement('input');

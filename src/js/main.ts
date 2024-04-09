@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    interface Credentials {
+    interface Credential {
         id: string;
         url: string;
         username: string;
@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     class EventListener {
-        credential: Credentials;
-        constructor(credential: Credentials) {
+        credential: Credential;
+        constructor(credential: Credential) {
             this.credential = credential;
         }
 
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
 
-    let credentials: Credentials[] = [];
+    let credentials: Credential[] = [];
 
 
     const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-    function changeInputType(credential:Credentials){
+    function changeInputType(credential:Credential){
         const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
         if (!passwordField){
             return;
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let password: string = passwordValue;
         let hidden = true;
 
-        const credential: Credentials = {
+        const credential: Credential = {
             id: Date.now().toString(),
             url: url,
             username: username,
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         //console.log(credentials);
     }
 
-    function createCredential(credential: Credentials){
+    function createCredential(credential: Credential){
         const ulElement = document.getElementById("script--credentials-ul") as HTMLUListElement | null;
         const liElement = document.createElement('li') as HTMLLIElement;
         liElement.id = credential.id;
@@ -160,16 +160,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
         const spanElement = document.createElement('span') as HTMLSpanElement;
         spanElement.innerHTML = credential.username
 
-        const aElement = document.createElement('a') as HTMLAnchorElement;
-        aElement.innerHTML = credential.url;
-        aElement.target = "_blank"; 
+        const anchorElement = document.createElement('a') as HTMLAnchorElement;
+        anchorElement.innerHTML = credential.url;
+        anchorElement.target = "_blank"; 
         if(credential.url.indexOf('http') > -1){
-            aElement.href = credential.url;
+            anchorElement.href = credential.url;
         }else {
-            aElement.href = `https://${credential.url}`
+            anchorElement.href = `https://${credential.url}`
         }
 
-        divElementHead.appendChild(spanElement); divElementHead.appendChild(aElement);
+        divElementHead.appendChild(spanElement); divElementHead.appendChild(anchorElement);
 
         const divElementFoot = document.createElement("div") as HTMLDivElement;
         divElementFoot.className = "credential-field-foot";
