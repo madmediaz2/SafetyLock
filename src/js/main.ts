@@ -34,9 +34,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 if (passwordField.type === 'password'){
                     passwordField.type = 'text';
                     this.credential.hidden = false;
+                    showButton.innerText = 'Hide'
                 } else{
                     passwordField.type = 'password';
                     this.credential.hidden = true;
+                    showButton.innerText = 'Show'
                 }
                 // Save updated credentials to local storage.
                 saveCredentials();
@@ -101,15 +103,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
         if (passwordElement.type === "text") {
             passwordElement.type = "password";
+            showButton.innerText = 'Show'
         } else {
             passwordElement.type = "text";
+            showButton.innerText = 'Hide'
         }
     })
     
     // Function to toggle password visibility for all credentials.
     function changeInputType(credential:Credential){
         const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
-        if (!passwordField){
+        const showButton = document.getElementById(`generated-button-show-${credential.id}`) as HTMLButtonElement | null;
+        if (!passwordField || !showButton){
             return;
         }
         if(iterator % 2 == 0){
@@ -125,7 +130,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 showAllButton.innerText = 'Show All';
             } 
         }
-        // Log iterator for debugging purposes.
+        showButton.innerText = credential.hidden ? "Show" : "Hide"
         console.log(iterator)
         saveCredentials();
     }
@@ -245,7 +250,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const deleteButtonElement = document.createElement('button') as HTMLButtonElement;
     deleteButtonElement.id = `generated-button-delete-${credential.id}`;
     deleteButtonElement.className = "button button-small";
-    deleteButtonElement.innerHTML = "Delete";
+    deleteButtonElement.innerHTML = credential.hidden ? 'Delete' : "Show"
 
     // Create a <div> element to hold the action buttons.
     const divElementButtons = document.createElement('div') as HTMLDivElement;
