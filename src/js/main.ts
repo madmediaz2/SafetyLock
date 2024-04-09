@@ -75,14 +75,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
     const cards = document.getElementsByClassName("cards");
     const card = cards[0] as HTMLElement;
-    card.style.flexDirection = 'row';
+    let direction: Boolean = JSON.parse(localStorage.getItem('direction') || '[]')
+    card.style.flexDirection = direction ? 'row' : 'row-reverse'
+    let row: Boolean;
     footerButton?.addEventListener('click', () =>{ 
         if(card.style.flexDirection === "row"){
-            card.style.flexDirection = "row-reverse"; 
+            card.style.flexDirection = "row-reverse";
+            row = false;
         } else {
             card.style.flexDirection = 'row'
+            row = true;
         }
+        saveDirection(row)
     })
+
+    function saveDirection(boolean:Boolean){
+        localStorage.setItem('direction', JSON.stringify(boolean))
+    }
 
     // Event listener for toggling password visibility for all credentials.
     const showAllButton = document.getElementById("script--button-show-all") as HTMLButtonElement | null;
@@ -165,19 +174,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
             return;
         }
 
-        // Retrieve input values and validate them.
-        let urlValue = urlElement.value; 
-        let usernameValue = usernameElement.value; 
-        let passwordValue = passwordElement.value;
-
-        if (urlValue === '' || usernameValue === '' || passwordValue === '') {
+        if (urlElement.value === '' || usernameElement.value === '' || passwordElement.value === '') {
             return;
         }
 
         // Create credential object and add it to the credentials array.
-        let url: string = urlValue;
-        let username: string = usernameValue;
-        let password: string = passwordValue;
+        let url: string = urlElement.value;
+        let username: string = usernameElement.value;
+        let password: string = passwordElement.value;
         let hidden = true;
 
         const credential: Credential = {
@@ -194,9 +198,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // Save updated credentials to local storage.
         saveCredentials();
         // Clear input values after creating the credential.
-        urlValue = '';
-        usernameValue ='';
-        passwordValue ='';
+        urlElement.value = '';
+        usernameElement.value = '';
+        passwordElement.value = '';
     }
 
     // Function to create DOM elements representing a credential and attach event listeners to them.
@@ -224,7 +228,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const anchorElement = document.createElement('a') as HTMLAnchorElement;
     anchorElement.innerHTML = credential.url;
     anchorElement.target = "_blank"; 
-    anchorElement.href = credential.url.startsWith('http') ? credential.url : `https://${credential.url}`;
+    anchorElement.href = credential.url.indexOf('http') ? credential.url : `https://${credential.url}`;
 
     // Append the username and URL elements to the <div> element.
     divElementHead.appendChild(spanElement); divElementHead.appendChild(anchorElement);

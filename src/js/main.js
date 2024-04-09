@@ -61,15 +61,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
     var footerButton = document.getElementById("script--button-footer");
     var cards = document.getElementsByClassName("cards");
     var card = cards[0];
-    card.style.flexDirection = 'row';
+    var direction = JSON.parse(localStorage.getItem('direction') || '[]');
+    card.style.flexDirection = direction ? 'row' : 'row-reverse';
+    var row;
     footerButton === null || footerButton === void 0 ? void 0 : footerButton.addEventListener('click', function () {
         if (card.style.flexDirection === "row") {
             card.style.flexDirection = "row-reverse";
+            row = false;
         }
         else {
             card.style.flexDirection = 'row';
+            row = true;
         }
+        saveDirection(row);
     });
+    function saveDirection(boolean) {
+        localStorage.setItem('direction', JSON.stringify(boolean));
+    }
     // Event listener for toggling password visibility for all credentials.
     var showAllButton = document.getElementById("script--button-show-all");
     var iterator = 0;
@@ -145,17 +153,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (!urlElement || !usernameElement || !passwordElement) {
             return;
         }
-        // Retrieve input values and validate them.
-        var urlValue = urlElement.value;
-        var usernameValue = usernameElement.value;
-        var passwordValue = passwordElement.value;
-        if (urlValue === '' || usernameValue === '' || passwordValue === '') {
+        if (urlElement.value === '' || usernameElement.value === '' || passwordElement.value === '') {
             return;
         }
         // Create credential object and add it to the credentials array.
-        var url = urlValue;
-        var username = usernameValue;
-        var password = passwordValue;
+        var url = urlElement.value;
+        var username = usernameElement.value;
+        var password = passwordElement.value;
         var hidden = true;
         var credential = {
             id: Date.now().toString(),
@@ -170,9 +174,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Save updated credentials to local storage.
         saveCredentials();
         // Clear input values after creating the credential.
-        urlValue = '';
-        usernameValue = '';
-        passwordValue = '';
+        urlElement.value = '';
+        usernameElement.value = '';
+        passwordElement.value = '';
     }
     // Function to create DOM elements representing a credential and attach event listeners to them.
     function createCredential(credential) {
@@ -195,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var anchorElement = document.createElement('a');
         anchorElement.innerHTML = credential.url;
         anchorElement.target = "_blank";
-        anchorElement.href = credential.url.startsWith('http') ? credential.url : "https://".concat(credential.url);
+        anchorElement.href = credential.url.indexOf('http') ? credential.url : "https://".concat(credential.url);
         // Append the username and URL elements to the <div> element.
         divElementHead.appendChild(spanElement);
         divElementHead.appendChild(anchorElement);
