@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             this.credential = credential;
         }
 
-        // This is an instance method, not static
+        // Appends an event listener to the show button
         addListenerShowButton() {
             const showButtonId = `generated-button-show-${this.credential.id}`;
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
@@ -38,6 +38,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
             
                 
         }
+        
+        //appends an eventlistener to the deletebutton
         addListenerDeleteButton() {
             const deleteButtonId = `generated-button-delete-${this.credential.id}`;
             const deleteButton = document.getElementById(deleteButtonId);  
@@ -49,13 +51,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 saveCredentials();
             });
         }
+
+        //appends an eventlistener to the passwordfield 
         addListenerPasswordField(){
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
 
-            if(!passwordField){
-                return;
-            }
-            passwordField.addEventListener('keyup', ()=>{
+            passwordField?.addEventListener('keyup', ()=>{
                 this.credential.password = passwordField.value
                 console.log(passwordField.value)
                 saveCredentials();
@@ -66,26 +67,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     
 
-
+    // 
     const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
     const cards = document.getElementsByClassName("cards");
     const card = cards[0] as HTMLElement;
     card.style.flexDirection = 'row';
     footerButton?.addEventListener('click', () =>{ 
         if(card.style.flexDirection === "row"){
-            card.style.flexDirection = "row-reverse"; // Change the flex direction here
+            card.style.flexDirection = "row-reverse"; 
         } else {
             card.style.flexDirection = 'row'
         }
     })
 
     const showAllButton = document.getElementById("script--button-show-all") as HTMLButtonElement | null;
-    console.log('check')
+    let iterator = 0;
     showAllButton?.addEventListener('click', () =>{
         console.log('clicked')
         credentials.forEach(credential => {
             changeInputType(credential)
         });
+        iterator += 1;
     })
 
     const showButton = document.getElementById("script--button-show") as HTMLButtonElement | null;
@@ -100,21 +102,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     })
     
-
-
-
+    
     function changeInputType(credential:Credential){
         const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
         if (!passwordField){
             return;
         }
-        if (passwordField.type === 'password'){
+        if(iterator % 2 == 0){
             passwordField.type = 'text';
             credential.hidden = false;
+            if(showAllButton) {
+                showAllButton.innerText = 'Hide All';
+            } 
         } else {
             passwordField.type = 'password';
             credential.hidden = true;
+            if(showAllButton) {
+                showAllButton.innerText = 'Show All';
+            } 
         }
+        console.log(iterator)
         saveCredentials();
     }
     

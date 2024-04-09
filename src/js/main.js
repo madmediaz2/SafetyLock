@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         function EventListener(credential) {
             this.credential = credential;
         }
-        // This is an instance method, not static
+        // Appends an event listener to the show button
         EventListener.prototype.addListenerShowButton = function () {
             var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 saveCredentials();
             });
         };
+        //appends an eventlistener to the deletebutton
         EventListener.prototype.addListenerDeleteButton = function () {
             var _this = this;
             var deleteButtonId = "generated-button-delete-".concat(this.credential.id);
@@ -36,13 +37,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 saveCredentials();
             });
         };
+        //appends an eventlistener to the passwordfield 
         EventListener.prototype.addListenerPasswordField = function () {
             var _this = this;
             var passwordField = document.getElementById("generated-field-pw-".concat(this.credential.id));
-            if (!passwordField) {
-                return;
-            }
-            passwordField.addEventListener('keyup', function () {
+            passwordField === null || passwordField === void 0 ? void 0 : passwordField.addEventListener('keyup', function () {
                 _this.credential.password = passwordField.value;
                 console.log(passwordField.value);
                 saveCredentials();
@@ -50,25 +49,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
         };
         return EventListener;
     }());
+    // 
     var footerButton = document.getElementById("script--button-footer");
     var cards = document.getElementsByClassName("cards");
     var card = cards[0];
     card.style.flexDirection = 'row';
     footerButton === null || footerButton === void 0 ? void 0 : footerButton.addEventListener('click', function () {
         if (card.style.flexDirection === "row") {
-            card.style.flexDirection = "row-reverse"; // Change the flex direction here
+            card.style.flexDirection = "row-reverse";
         }
         else {
             card.style.flexDirection = 'row';
         }
     });
     var showAllButton = document.getElementById("script--button-show-all");
-    console.log('check');
+    var iterator = 0;
     showAllButton === null || showAllButton === void 0 ? void 0 : showAllButton.addEventListener('click', function () {
         console.log('clicked');
         credentials.forEach(function (credential) {
             changeInputType(credential);
         });
+        iterator += 1;
     });
     var showButton = document.getElementById("script--button-show");
     showButton === null || showButton === void 0 ? void 0 : showButton.addEventListener('click', function () {
@@ -87,14 +88,21 @@ document.addEventListener("DOMContentLoaded", function (event) {
         if (!passwordField) {
             return;
         }
-        if (passwordField.type === 'password') {
+        if (iterator % 2 == 0) {
             passwordField.type = 'text';
             credential.hidden = false;
+            if (showAllButton) {
+                showAllButton.innerText = 'Hide All';
+            }
         }
         else {
             passwordField.type = 'password';
             credential.hidden = true;
+            if (showAllButton) {
+                showAllButton.innerText = 'Show All';
+            }
         }
+        console.log(iterator);
         saveCredentials();
     }
     document.addEventListener("keypress", function (event) {
