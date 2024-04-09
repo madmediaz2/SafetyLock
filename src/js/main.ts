@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-    console.log("Hello, World!");
-
     interface Credentials {
         id: string;
         url: string;
@@ -11,7 +9,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     class EventListener {
         credential: Credentials;
-
         constructor(credential: Credentials) {
             this.credential = credential;
         }
@@ -19,126 +16,83 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // This is an instance method, not static
         addListenerShowButton() {
             const showButtonId = `generated-button-show-${this.credential.id}`;
-            const passwordField = document.getElementById(
-                `generated-field-pw-${this.credential.id}`
-            ) as HTMLInputElement | null ; 
-            const showButton = document.getElementById(
-                showButtonId
-            ) as HTMLButtonElement | null;
-            if (showButton) {
-                showButton.addEventListener("click", () => {
-                    console.log(
-                        `Show button for ${this.credential.id} clicked`
-                    );
-                    if (passwordField !== null && passwordField.type === 'password'){
-                        passwordField.type = 'text';
-                    } else if(passwordField) {
-                        passwordField.type = 'password';
-                    }
+            const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
+            const showButton = document.getElementById(showButtonId) as HTMLButtonElement | null;
 
-                });
-            } else {
-                console.log(`Button with ID ${showButtonId} not found.`);
+            if(!passwordField){
+                return;
             }
+
+            showButton?.addEventListener("click", () => {
+                if (passwordField.type === 'password'){
+                    passwordField.type = 'text';
+                } else{
+                    passwordField.type = 'password';
+                }
+            });
+            
+                
         }
         addListenerDeleteButton() {
             const deleteButtonId = `generated-button-delete-${this.credential.id}`;
-            const deleteButton = document.getElementById(deleteButtonId);
+            const deleteButton = document.getElementById(deleteButtonId);  
 
-            if (deleteButton) {
-                deleteButton.addEventListener("click", () => {
-                    const listItem = document.getElementById(
-                            this.credential.id
-                    );
-                    if (listItem) {
-                        listItem.remove();
-                        console.log(
-                            `Credential ${this.credential.id} deleted.`
-                        );
-                    } else {
-                        console.log(
-                            `List item for credential ${this.credential.id} not found.`
-                        );
-                    }
-                });
-            } else {
-                console.log(`Button with ID ${deleteButtonId} not found.`);
-            }
+            deleteButton?.addEventListener("click", () => {
+                const listItem = document.getElementById(this.credential.id);
+                listItem?.remove();    
+            });
         }
     }
 
 
     let credentials: Credentials[] = [];
 
-    const usernameElement = document.getElementById(
-        "script--credential-username"
-    ) as HTMLInputElement | null;
-    const showButton = document.getElementById(
-        "script--button-show"
-    ) as HTMLButtonElement | null;
-    const urlElement = document.getElementById(
-        "script--credential-URL"
-    ) as HTMLInputElement | null;
-    const passwordElement = document.getElementById(
-        "script--credential-pw"
-    ) as HTMLInputElement | null;
-    const appendButton = document.getElementById(
-        "script--button-append"
-    ) as HTMLButtonElement | null;
-    const footerButton = document.getElementById(
-        "script--button-footer"
-    ) as HTMLButtonElement | null;
-    const ulElement = document.getElementById(
-        "script--credentials-ul"
-    ) as HTMLUListElement | null;
-    const showAllButton = document.getElementById(
-        "script--button-show-all"
-    ) as HTMLButtonElement | null;
 
-    if (footerButton) {
-        footerButton.addEventListener('click', () =>{
-            const cards = document.getElementsByClassName("cards");
-            for (let i = 0; i < cards.length; i++) {
-                const card = cards[i] as HTMLElement;
-                if(card.style.flexDirection === "row"){
-                    card.style.flexDirection = "row-reverse"; // Change the flex direction here
-                } else {
-                    card.style.flexDirection = 'row'
-                }
-            }
-        })
-    }
+    const footerButton = document.getElementById("script--button-footer") as HTMLButtonElement | null;
+    const cards = document.getElementsByClassName("cards");
+    const card = cards[0] as HTMLElement;
+    card.style.flexDirection = 'row';
+    footerButton?.addEventListener('click', () =>{ 
+        if(card.style.flexDirection === "row"){
+            card.style.flexDirection = "row-reverse"; // Change the flex direction here
+        } else {
+            card.style.flexDirection = 'row'
+        }
+    })
 
-    if(showAllButton){
-        console.log('check')
-        showAllButton.addEventListener('click', () =>{
-            console.log('clicked')
-            credentials.forEach(credentials => {
-                changeInputType(credentials)
-            });
-        })
-    }
+    const showAllButton = document.getElementById("script--button-show-all") as HTMLButtonElement | null;
+    console.log('check')
+    showAllButton?.addEventListener('click', () =>{
+        console.log('clicked')
+        credentials.forEach(credential => {
+            changeInputType(credential)
+        });
+    })
 
-    if(showButton){
-        showButton.addEventListener('click', () =>{
-            if (passwordElement !== null && passwordElement.type === "text") {
-                passwordElement.type = "password";
-            } else if (passwordElement) {
-                passwordElement.type = "text";
-            }
-        })
-    }
+    const showButton = document.getElementById("script--button-show") as HTMLButtonElement | null;
+    showButton?.addEventListener('click', () =>{
+        if (!passwordElement){
+            return;
+        }
+        if (passwordElement.type === "text") {
+            passwordElement.type = "password";
+        } else {
+            passwordElement.type = "text";
+        }
+    })
+    
 
 
 
     function changeInputType(credential:Credentials){
-        const passwordField = document.getElementById(
-        `generated-field-pw-${credential.id}`
-            ) as HTMLInputElement | null ;
-        if (passwordField !== null && passwordField.type === 'password'){
-                passwordField.type = 'text';
-        } else if(passwordField) {
-                passwordField.type = 'password';
+        const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
+        if (!passwordField){
+            return;
+        }
+        if (passwordField.type === 'password'){
+            passwordField.type = 'text';
+        } else {
+            passwordField.type = 'password';
         }
     }
     
@@ -149,23 +103,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
-    if (appendButton) {
-        appendButton.addEventListener("click", () => {
-          initiateCredential();
-        });
 
-    }
+    const appendButton = document.getElementById("script--button-append") as HTMLButtonElement | null;
+    appendButton?.addEventListener("click", () => {
+        initiateCredential();
+    });
 
+
+    
+    const usernameElement = document.getElementById("script--credential-username") as HTMLInputElement | null;
+    const urlElement = document.getElementById("script--credential-URL") as HTMLInputElement | null;
+    const passwordElement = document.getElementById("script--credential-pw") as HTMLInputElement | null;
     function initiateCredential(){
         if (!urlElement || !usernameElement || !passwordElement) {
-            console.log(
-                "One or more elements are missing, returning out of function"
-            );
             return;
         }
-        let url: string = urlElement.value;
-        let username: string = usernameElement.value;
-        let password: string = passwordElement.value;
+
+        let urlValue = urlElement.value; let usernameValue = usernameElement.value; let passwordValue = passwordElement.value;
+
+        if (urlValue === '' || usernameValue === '' || passwordValue === '') {
+            return;
+        }
+
+        let url: string = urlValue;
+        let username: string = usernameValue;
+        let password: string = passwordValue;
         let hidden = true;
 
         const credential: Credentials = {
@@ -178,14 +140,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         credentials.push(credential);
         createCredential(credential);
+        urlValue = '';
+        usernameValue ='';
+        passwordValue ='';
         //console.log(credentials);
     }
 
     function createCredential(credential: Credentials){
-
+        const ulElement = document.getElementById("script--credentials-ul") as HTMLUListElement | null;
         const liElement = document.createElement('li') as HTMLLIElement;
         liElement.id = credential.id;
         ulElement?.appendChild(liElement);
+        
         const list = document.getElementById(credential.id) as HTMLLIElement | null;
 
         const divElementHead = document.createElement("div") as HTMLDivElement;

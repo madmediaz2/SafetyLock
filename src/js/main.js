@@ -1,100 +1,78 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-    console.log("Hello, World!");
     var EventListener = /** @class */ (function () {
         function EventListener(credential) {
             this.credential = credential;
         }
         // This is an instance method, not static
         EventListener.prototype.addListenerShowButton = function () {
-            var _this = this;
             var showButtonId = "generated-button-show-".concat(this.credential.id);
             var passwordField = document.getElementById("generated-field-pw-".concat(this.credential.id));
             var showButton = document.getElementById(showButtonId);
-            if (showButton) {
-                showButton.addEventListener("click", function () {
-                    console.log("Show button for ".concat(_this.credential.id, " clicked"));
-                    if (passwordField !== null && passwordField.type === 'password') {
-                        passwordField.type = 'text';
-                    }
-                    else if (passwordField) {
-                        passwordField.type = 'password';
-                    }
-                });
+            if (!passwordField) {
+                return;
             }
-            else {
-                console.log("Button with ID ".concat(showButtonId, " not found."));
-            }
+            showButton === null || showButton === void 0 ? void 0 : showButton.addEventListener("click", function () {
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                }
+                else {
+                    passwordField.type = 'password';
+                }
+            });
         };
         EventListener.prototype.addListenerDeleteButton = function () {
             var _this = this;
             var deleteButtonId = "generated-button-delete-".concat(this.credential.id);
             var deleteButton = document.getElementById(deleteButtonId);
-            if (deleteButton) {
-                deleteButton.addEventListener("click", function () {
-                    var listItem = document.getElementById(_this.credential.id);
-                    if (listItem) {
-                        listItem.remove();
-                        console.log("Credential ".concat(_this.credential.id, " deleted."));
-                    }
-                    else {
-                        console.log("List item for credential ".concat(_this.credential.id, " not found."));
-                    }
-                });
-            }
-            else {
-                console.log("Button with ID ".concat(deleteButtonId, " not found."));
-            }
+            deleteButton === null || deleteButton === void 0 ? void 0 : deleteButton.addEventListener("click", function () {
+                var listItem = document.getElementById(_this.credential.id);
+                listItem === null || listItem === void 0 ? void 0 : listItem.remove();
+            });
         };
         return EventListener;
     }());
     var credentials = [];
-    var usernameElement = document.getElementById("script--credential-username");
-    var showButton = document.getElementById("script--button-show");
-    var urlElement = document.getElementById("script--credential-URL");
-    var passwordElement = document.getElementById("script--credential-pw");
-    var appendButton = document.getElementById("script--button-append");
     var footerButton = document.getElementById("script--button-footer");
-    var ulElement = document.getElementById("script--credentials-ul");
+    var cards = document.getElementsByClassName("cards");
+    var card = cards[0];
+    card.style.flexDirection = 'row';
+    footerButton === null || footerButton === void 0 ? void 0 : footerButton.addEventListener('click', function () {
+        if (card.style.flexDirection === "row") {
+            card.style.flexDirection = "row-reverse"; // Change the flex direction here
+        }
+        else {
+            card.style.flexDirection = 'row';
+        }
+    });
     var showAllButton = document.getElementById("script--button-show-all");
-    if (footerButton) {
-        footerButton.addEventListener('click', function () {
-            var cards = document.getElementsByClassName("cards");
-            for (var i = 0; i < cards.length; i++) {
-                var card = cards[i];
-                if (card.style.flexDirection === "row") {
-                    card.style.flexDirection = "row-reverse"; // Change the flex direction here
-                }
-                else {
-                    card.style.flexDirection = 'row';
-                }
-            }
+    console.log('check');
+    showAllButton === null || showAllButton === void 0 ? void 0 : showAllButton.addEventListener('click', function () {
+        console.log('clicked');
+        credentials.forEach(function (credential) {
+            changeInputType(credential);
         });
-    }
-    if (showAllButton) {
-        console.log('check');
-        showAllButton.addEventListener('click', function () {
-            console.log('clicked');
-            credentials.forEach(function (credentials) {
-                changeInputType(credentials);
-            });
-        });
-    }
-    if (showButton) {
-        showButton.addEventListener('click', function () {
-            if (passwordElement !== null && passwordElement.type === "text") {
-                passwordElement.type = "password";
-            }
-            else if (passwordElement) {
-                passwordElement.type = "text";
-            }
-        });
-    }
+    });
+    var showButton = document.getElementById("script--button-show");
+    showButton === null || showButton === void 0 ? void 0 : showButton.addEventListener('click', function () {
+        if (!passwordElement) {
+            return;
+        }
+        if (passwordElement.type === "text") {
+            passwordElement.type = "password";
+        }
+        else {
+            passwordElement.type = "text";
+        }
+    });
     function changeInputType(credential) {
         var passwordField = document.getElementById("generated-field-pw-".concat(credential.id));
-        if (passwordField !== null && passwordField.type === 'password') {
+        if (!passwordField) {
+            return;
+        }
+        if (passwordField.type === 'password') {
             passwordField.type = 'text';
         }
-        else if (passwordField) {
+        else {
             passwordField.type = 'password';
         }
     }
@@ -104,19 +82,26 @@ document.addEventListener("DOMContentLoaded", function (event) {
             console.log('test');
         }
     });
-    if (appendButton) {
-        appendButton.addEventListener("click", function () {
-            initiateCredential();
-        });
-    }
+    var appendButton = document.getElementById("script--button-append");
+    appendButton === null || appendButton === void 0 ? void 0 : appendButton.addEventListener("click", function () {
+        initiateCredential();
+    });
+    var usernameElement = document.getElementById("script--credential-username");
+    var urlElement = document.getElementById("script--credential-URL");
+    var passwordElement = document.getElementById("script--credential-pw");
     function initiateCredential() {
         if (!urlElement || !usernameElement || !passwordElement) {
-            console.log("One or more elements are missing, returning out of function");
             return;
         }
-        var url = urlElement.value;
-        var username = usernameElement.value;
-        var password = passwordElement.value;
+        var urlValue = urlElement.value;
+        var usernameValue = usernameElement.value;
+        var passwordValue = passwordElement.value;
+        if (urlValue === '' || usernameValue === '' || passwordValue === '') {
+            return;
+        }
+        var url = urlValue;
+        var username = usernameValue;
+        var password = passwordValue;
         var hidden = true;
         var credential = {
             id: Date.now().toString(),
@@ -127,9 +112,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         };
         credentials.push(credential);
         createCredential(credential);
+        urlValue = '';
+        usernameValue = '';
+        passwordValue = '';
         //console.log(credentials);
     }
     function createCredential(credential) {
+        var ulElement = document.getElementById("script--credentials-ul");
         var liElement = document.createElement('li');
         liElement.id = credential.id;
         ulElement === null || ulElement === void 0 ? void 0 : ulElement.appendChild(liElement);
@@ -141,13 +130,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         var aElement = document.createElement('a');
         aElement.innerHTML = credential.url;
         aElement.target = "_blank";
-        if (credential.url.indexOf('https') > -1) {
+        if (credential.url.indexOf('http') > -1) {
             aElement.href = credential.url;
         }
         else {
             aElement.href = "https://".concat(credential.url);
         }
-        // Set the target attribute to "_blank" to open the link in a new tab
         divElementHead.appendChild(spanElement);
         divElementHead.appendChild(aElement);
         var divElementFoot = document.createElement("div");
