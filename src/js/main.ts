@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
     // Define the structure of a credential object
     interface Credential {
         id: string;
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
             const showButton = document.getElementById(showButtonId) as HTMLButtonElement | null;
 
-            if(!passwordField){
+            if(!passwordField) {
                 return;
             }
 
@@ -58,10 +58,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         // Add event listener to update password in the credential object on keyup
-        addListenerPasswordField(){
+        addListenerPasswordField() {
             const passwordField = document.getElementById(`generated-field-pw-${this.credential.id}`) as HTMLInputElement | null; 
 
-            passwordField?.addEventListener('keyup', ()=>{
+            passwordField?.addEventListener('keyup', () => {
                 this.credential.password = passwordField.value
                 // Save any changes to credentials in local storage
                 saveCredentials();
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     card.style.flexDirection = direction ? 'row' : 'row-reverse'
 
     let row: Boolean;
-    footerButton?.addEventListener('click', () =>{ 
+    footerButton?.addEventListener('click', () => { 
         if(card.style.flexDirection === "row"){
             card.style.flexDirection = "row-reverse";
             row = false;
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // Event listener to toggle password visibility for all credentials
     const showAllButton = document.getElementById("script--button-show-all") as HTMLButtonElement | null;
     let iterator = 0;
-    showAllButton?.addEventListener('click', () =>{
+    showAllButton?.addEventListener('click', () => {
         console.log('clicked')
         credentials.forEach(credential => {
             changeInputType(credential)
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     })
 
     const showButton = document.getElementById("script--button-show") as HTMLButtonElement | null;
-    showButton?.addEventListener('click', () =>{
+    showButton?.addEventListener('click', () => {
         if (!passwordElement){
             return;
         }
@@ -124,10 +124,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     function changeInputType(credential:Credential){
         const passwordField = document.getElementById(`generated-field-pw-${credential.id}`) as HTMLInputElement | null;
         const showButton = document.getElementById(`generated-button-show-${credential.id}`) as HTMLButtonElement | null;
-        if (!passwordField || !showButton){
+        if (!passwordField || !showButton) {
             return;
         }
-        if(iterator % 2 == 0){
+        if(iterator % 2 == 0) {
             passwordField.type = 'text';
             credential.hidden = false;
             if(showAllButton) {
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const passwordElement = document.getElementById("script--credential-pw") as HTMLInputElement | null;
 
     // Function to create a new credential object and add it to the array
-    function initiateCredential(){
+    function initiateCredential() {
         if (!urlElement || !usernameElement || !passwordElement) {
             return;
         }
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     // Function to create DOM elements for a credential and attach event listeners
-    function createCredential(credential: Credential){
+    function createCredential(credential: Credential) {
     
         const ulElement = document.getElementById("script--credentials-ul") as HTMLUListElement | null;
         const liElement = document.createElement('li') as HTMLLIElement;
